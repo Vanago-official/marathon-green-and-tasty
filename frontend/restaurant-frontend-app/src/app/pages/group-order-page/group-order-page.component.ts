@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subscription, catchError, exhaustMap, filter, finalize, forkJoin, interval, map, switchMap, tap } from 'rxjs';
 import { ParticipantCardComponent } from '@app/components/group-orders/participant-card/participant-card.component';
 import { GroupSessionsResponse } from '@app/models/group-orders/group-sessions-response.model';
@@ -31,6 +31,7 @@ const STATUS_LABELS: Record<GroupReservationStatus, string> = {
 })
 export class GroupOrderPageComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly service = inject(GroupOrdersService);
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -67,6 +68,20 @@ export class GroupOrderPageComponent {
 
   constructor() {
     this.load();
+  }
+
+  addMyDishes(): void {
+    this.service
+      .openOwnerCart$(this.reservationId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ inviteToken, guestSessionId, sessionToken, guestName }) => {
+        // Гостьова сторінка відновлює сесію з цих ключів, тож Owner не створює окремого гостя.
+        const key = (part: string) => `guestPreorder:${inviteToken}:${part}`;
+        localStorage.setItem(key('guestSessionId'), guestSessionId);
+        localStorage.setItem(key('guestSessionToken'), sessionToken);
+        localStorage.setItem(key('guestName'), guestName);
+        void this.router.navigate(['/join', inviteToken]);
+      });
   }
 
   load(): void {

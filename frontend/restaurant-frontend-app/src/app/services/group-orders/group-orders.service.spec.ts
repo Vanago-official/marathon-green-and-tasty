@@ -22,14 +22,21 @@ describe('Рівень 2 · GroupOrdersService', () => {
 
   afterEach(() => http.verify());
 
-  it('getGroupInvite$: reservationId → invite-token → invite', () => {
-    let groupId = '';
-    service.getGroupInvite$('res-1').subscribe((invite) => (groupId = invite.GroupReservationId));
+  it('getGroupInvite$: reads the owner group endpoint', () => {
+    let result: unknown;
+    service.getGroupInvite$('res-1').subscribe((invite) => (result = invite));
+    const invite = { GroupReservationId: 'group-1' };
+    http.expectOne(`${BASE_URL}/reservations/res-1/group`).flush(invite);
+    expect(result).toEqual(invite);
+  });
 
-    http.expectOne(`${BASE_URL}/reservations/res-1/invite-token`).flush({ token: 'tok' });
-    http.expectOne(`${BASE_URL}/guest/invites/tok`).flush({ GroupReservationId: 'grp-1' });
-
-    expect(groupId).toBe('grp-1');
+  it('openOwnerCart$: issues the owner token, then reads the invite token', () => {
+    let result: unknown;
+    service.openOwnerCart$('res-1').subscribe((access) => (result = access));
+    const session = { guestSessionId: 's-1', sessionToken: 't-1', guestName: 'Owner' };
+    http.expectOne(`${BASE_URL}/reservations/res-1/owner-session-token`).flush(session);
+    http.expectOne(`${BASE_URL}/reservations/res-1/invite-token`).flush({ token: 'invite-1' });
+    expect(result).toEqual({ ...session, inviteToken: 'invite-1' });
   });
 
   it('getSessions$: GET /guest/groups/{id}/sessions', () => {

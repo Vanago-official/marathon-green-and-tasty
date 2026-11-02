@@ -10,6 +10,16 @@ import { GuestInvite } from '@app/models/reservations/guest-invite.model';
 import { GuestInviteService } from '@app/services/reservation/guest-invite.service';
 import { API_BASE_URL } from '@app/shared/config/api-base-url.token';
 
+export interface OwnerSessionToken {
+  guestSessionId: string;
+  sessionToken: string;
+  guestName: string;
+}
+
+export interface OwnerCartAccess extends OwnerSessionToken {
+  inviteToken: string;
+}
+
 export interface GroupRequestOptions {
   /** Фоновий запит: помилка не показує toast. */
   silent?: boolean;
@@ -22,9 +32,18 @@ export class GroupOrdersService {
   private readonly guestInviteService = inject(GuestInviteService);
 
   getGroupInvite$(reservationId: string): Observable<GuestInvite> {
-    return this.guestInviteService
-      .getInviteToken$(reservationId)
-      .pipe(switchMap(({ token }) => this.guestInviteService.getInvite$(token)));
+    return this.http.get<GuestInvite>(`${this.baseUrl}/reservations/${encodeURIComponent(reservationId)}/group`);
+  }
+
+  /** Токен для власного кошика Owner і адреса гостьової сторінки, де він цей кошик наповнює. */
+  openOwnerCart$(reservationId: string): Observable<OwnerCartAccess> {
+    return this.http
+      .post<OwnerSessionToken>(`${this.baseUrl}/reservations/${encodeURIComponent(reservationId)}/owner-session-token`, null)
+      .pipe(
+        switchMap((session) =>
+          this.guestInviteService.getInviteToken$(reservationId).pipe(map(({ token }) => ({ ...session, inviteToken: token }))),
+        ),
+      );
   }
 
   getSessions$(groupReservationId: string, options: GroupRequestOptions = {}): Observable<GroupSessionsResponse> {

@@ -87,6 +87,7 @@
           <span class="grand-total-value">{{ consolidated().total | currency }}</span>
         </p>
         @if (isOpen()) {
+          <button type="button" class="link" (click)="addMyDishes()">Add My Dishes</button>
           <button type="button" class="primary" [disabled]="!canSubmit()" (click)="confirmingSubmit.set(true)">Submit Pre-Order</button>
         }
       </footer>
