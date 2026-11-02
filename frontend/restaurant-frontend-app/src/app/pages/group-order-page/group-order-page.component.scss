@@ -1,0 +1,255 @@
+@use 'app/shared/styles/abstracts/colors' as color;
+
+.page {
+  box-sizing: border-box;
+  padding: 24px 16px 48px;
+}
+
+.sheet {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 840px;
+  padding: 40px;
+  margin: 0 auto;
+  background: color.$neutral-100;
+  border-radius: 24px;
+}
+
+.page-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid color.$bg-green;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 40px;
+  color: color.$neutral-900;
+}
+
+.badge {
+  padding: 2px 12px;
+  font-size: 12px;
+  line-height: 20px;
+  color: color.$neutral-700;
+  background: color.$neutral-200;
+  border-radius: 8px;
+
+  &--sent {
+    background: color.$orange-100;
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding: 0;
+  margin: 12px 0 0;
+  color: color.$neutral-700;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding: 24px;
+  margin: 0;
+  color: color.$neutral-700;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+.sync {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  color: color.$neutral-600;
+}
+
+.sync-error {
+  color: color.$red-400;
+}
+
+.warning {
+  padding: 12px 16px;
+  margin: 0;
+  color: color.$neutral-900;
+  background: color.$orange-30;
+  border: 1px solid color.$orange-100;
+  border-radius: 8px;
+}
+
+.participants {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.consolidated {
+  padding: 16px;
+  background: color.$neutral-0;
+  border-radius: 12px;
+}
+
+.section-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: color.$neutral-900;
+}
+
+.consolidated-items {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 4px 0;
+    color: color.$neutral-900;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 2px solid color.$bg-green;
+}
+
+.grand-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 500;
+  color: color.$neutral-900;
+}
+
+.grand-total-value {
+  color: color.$green-800;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: color.$neutral-0;
+  background: color.$green-gradient;
+  border: none;
+  border-radius: 8px;
+
+  &:disabled {
+    background: color.$neutral-400;
+  }
+
+  &--compact {
+    width: auto;
+    min-height: 44px;
+  }
+}
+
+.secondary {
+  padding: 8px 24px;
+  font-weight: 500;
+  color: color.$green-600;
+  background: none;
+  border: 1px solid color.$green-600;
+  border-radius: 8px;
+}
+
+.link {
+  padding: 4px 8px;
+  font-weight: 500;
+  color: color.$neutral-900;
+  background: none;
+  border: none;
+  border-bottom: 1px solid color.$neutral-900;
+
+  &:disabled {
+    color: color.$neutral-400;
+    border-color: color.$neutral-400;
+  }
+}
+
+.danger {
+  min-height: 44px;
+  padding: 8px 24px;
+  font-weight: 600;
+  color: color.$red-400;
+  background: color.$neutral-0;
+  border: 1px solid color.$red-400;
+  border-radius: 8px;
+}
+
+.dialog-text {
+  margin: 0;
+  line-height: 24px;
+  color: color.$neutral-900;
+}
+
+.dialog-actions {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 8px;
+  }
+
+  .sheet {
+    padding: 16px;
+  }
+
+  .grand-total {
+    font-size: 20px;
+  }
+}
